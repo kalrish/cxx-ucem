@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme.html" title="Base class for character encoding schemes. " alt="" coords="5,93,248,149"/>
+<area shape="rect" id="node2" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound.html" title="Unicode_CharacterEncoding\lModel::CharacterEncodingScheme\l_Compound\&lt; CEF::code_unit_width \&gt;" alt="" coords="319,13,581,69"/>
+<area shape="rect" id="node4" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound.html" title="Base class for compound character encoding schemes. " alt="" coords="296,93,604,149"/>
+<area shape="rect" id="node5" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Simple.html" title="Base class for simple character encoding schemes. " alt="" coords="323,173,577,229"/>
+<area shape="rect" id="node3" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark.html" title="Base class for compound character encoding schemes that employ a byte order mark as their switching m..." alt="" coords="652,5,897,76"/>
+</map>

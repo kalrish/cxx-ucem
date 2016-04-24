@@ -1,0 +1,6 @@
+<map id="Unicode_CharacterEncodingModel::CharacterEncodingScheme&lt; CodeUnitWidth &gt;" name="Unicode_CharacterEncodingModel::CharacterEncodingScheme&lt; CodeUnitWidth &gt;">
+<area shape="rect" id="node2" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound.html" title="CharacterEncodingScheme\l_Compound\&lt; CEF::code_unit\l_width \&gt;" alt="" coords="314,13,521,69"/>
+<area shape="rect" id="node4" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound.html" title="Base class for compound character encoding schemes. " alt="" coords="296,93,539,149"/>
+<area shape="rect" id="node5" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Simple.html" title="Base class for simple character encoding schemes. " alt="" coords="296,173,539,229"/>
+<area shape="rect" id="node3" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark.html" title="Base class for compound character encoding schemes that employ a byte order mark as their switching m..." alt="" coords="587,5,832,76"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingForm.html" title="Base class for character encoding forms. " alt="" coords="5,65,272,121"/>
+<area shape="rect" id="node2" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingForm__FixedWidth.html" title="Base class for fixed width character encoding forms. " alt="" coords="325,5,611,76"/>
+<area shape="rect" id="node3" href="$classUnicode__CharacterEncodingModel_1_1CharacterEncodingForm__VariableWidth.html" title="Base class for variable width character encoding forms. " alt="" coords="320,101,616,186"/>
+</map>
