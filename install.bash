@@ -71,7 +71,7 @@ if [[ -z $errors ]] ; then
 	echo "${style_DESTDIR}DESTDIR${tput_sgr0}=${style_DESTDIR_value}${DESTDIR}${tput_sgr0}"
 	echo
 	
-	print_n_run install -v -d -- "${DESTDIR}${installation_dir_variables[includedir]}/unicode-character-encoding-model"/{coded_character_sets,character_encoding_forms,character_encoding_schemes} "${DESTDIR}${installation_dir_variables[libdir]}/unicode-character-encoding-model/"{coded_character_sets,character_encoding_forms,character_encoding_schemes}
+	print_n_run install -v -d -- {"${DESTDIR}${installation_dir_variables[includedir]}","${DESTDIR}${installation_dir_variables[libdir]}"}/unicode-character-encoding-model/{coded_character_sets,coded_character_set_translators,character_encoding_forms,character_encoding_schemes}
 	print_n_run install -v -t "${DESTDIR}${installation_dir_variables[includedir]}/unicode-character-encoding-model" -- src/*.{hpp,tpp}
 	
 	exit 0
