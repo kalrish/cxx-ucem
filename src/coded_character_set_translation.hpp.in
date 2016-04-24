@@ -1,0 +1,71 @@
+namespace Unicode_CharacterEncodingModel {
+	/**
+	 * Thrown when it's not possible to translate a code point into another coded character set.
+	*/
+	struct untranslatable final
+	{ };
+	
+	namespace detail {
+		/**
+		 * Translator function.
+		 * 
+		 * This function template is to be fully specialized by coded character set
+		 * translation implementations.
+		 * 
+		 * @tparam CodedCharacterSet1     The source coded character set.
+		 * @tparam CodedCharacterSet2     The output coded character set.
+		 * 
+		 * @throw Unicode_CharacterEncodingModel::untranslatable   If the character
+		 *    associated to the given nonnegative integer by the source coded
+		 *    character set is not mapped by the target coded character set.
+		 * 
+		 * @return The nonnegative integer that the output coded character set maps
+		 *    to the character mapped to the input nonnegative integer by the input
+		 *    coded character set.
+		*/
+		template<
+		 class CodedCharacterSet1,
+		 class CodedCharacterSet2
+		>
+		typename CodedCharacterSet2::nonnegative_integer
+		code_point_translator
+		(
+		 typename CodedCharacterSet1::nonnegative_integer
+		);
+	}
+	
+	/**
+	 * Translate a code point between two coded character sets.
+	 * 
+	 * @attention Do not confuse translating with transliterating. What this
+	 * function does is translate a code point from one coded character set to
+	 * another *if* both coded character sets map it. The latter is outside
+	 * the scope of this project, and thus is not handled at all by this library.
+	 * 
+	 * @tparam CodedCharacterSet1     Input coded character set.
+	 * @tparam CodedCharacterSet2     Output coded character set.
+	 * 
+	 * @param[in] i     A nonnegative integer mapped by both the input and output
+	 *                     coded character sets.
+	 * 
+	 * @throw Unicode_CharacterEncodingModel::untranslatable   If the character
+	 *    associated to the given nonnegative integer by the source coded
+	 *    character set is not mapped by the target coded character set.
+	 * 
+	 * @return The nonnegative integer that the output coded character set maps
+	 *    to the character mapped to the input nonnegative integer by the input
+	 *    coded character set.
+	*/
+	template<
+	 class CodedCharacterSet1,
+	 class CodedCharacterSet2
+	>
+	typename CodedCharacterSet2::nonnegative_integer
+	translate_code_point
+	(
+	 typename CodedCharacterSet1::nonnegative_integer i
+	) noexcept( noexcept( detail::code_point_translator<CodedCharacterSet1,CodedCharacterSet2>(i) ) );
+}
+
+
+#include "coded_character_set_translation.tpp"

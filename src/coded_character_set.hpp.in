@@ -1,0 +1,104 @@
+#include "detail.hpp"
+
+
+namespace Unicode_CharacterEncodingModel {
+	/**
+	 * Base class for coded character sets.
+	 * 
+	 * Coded character set implementations should derive from this class.
+	 * 
+	 * @tparam Derived     The class that derives from this class.
+	 * @tparam Min         The minimum nonnegative integer that the coded
+	 *                        character set maps.
+	 * @tparam Max         The maximum nonnegative integer that the coded
+	 *                        character set maps.
+	*/
+	template<
+	 class Derived,
+	 unsigned long long Min,
+	 unsigned long long Max
+	>
+	class CodedCharacterSet
+	{
+		static_assert( Max > Min , "the maximum nonnegative integer that a coded character set maps must be greater than the minimum" );
+		
+		public:
+			/**
+			 * Unsigned integer type capable of holding any of the nonnegative integers
+			 *    mapped by the coded character set, i.e., any value in its code space.
+			*/
+			using nonnegative_integer =
+				typename detail::select_uint_holding_up_to<Max>::type;
+		
+		public:
+			/**
+			 * Minimum nonnegative integer that the coded character set maps.
+			 * 
+			 * @attention The set of nonnegative integers mapped by a coded character
+			 * set may not be a contiguous range. Therefore, it would be wrong to check
+			 * whether a nonnegative integer is mapped by a coded character set by
+			 * checking whether it is greater than or equal to the minimum value mapped
+			 * and equal to or less than the maximum value mapped; instead, use #maps.
+			*/
+			static constexpr auto
+				smallest_code_point = Min;
+			/**
+			 * Maximum nonnegative integer that the coded character set maps.
+			 * 
+			 * @attention The set of nonnegative integers mapped by a coded character
+			 * set may not be a contiguous range. Therefore, it would be wrong to check
+			 * whether a nonnegative integer is mapped by a coded character set by
+			 * checking whether it is greater than or equal to the minimum value mapped
+			 * and equal to or less than the maximum value mapped; instead, use #maps.
+			*/
+			static constexpr auto
+				greatest_code_point = Max;
+		
+		public:
+			CodedCharacterSet
+				( )
+				= delete;
+			CodedCharacterSet
+				(
+				 const CodedCharacterSet &
+				)
+				= delete;
+			CodedCharacterSet
+				(
+				 CodedCharacterSet &&
+				)
+				= delete;
+			~CodedCharacterSet
+				( )
+				= delete;
+			
+			/**
+			 * Check whether the coded character set maps a nonnegative integer to a
+			 *    character.
+			 * 
+			 * @param[in] i     The nonnegative integer to check.
+			 * 
+			 * @return \c true if the coded character set maps the given nonnegative
+			 *    integer; \c false otherwise.
+			*/
+			[[gnu::const]]
+			static bool
+				maps
+				(
+				 nonnegative_integer i
+				) noexcept;
+	};
+	
+	/**
+	 * Namespace reserved for coded character set implementations.
+	*/
+	namespace coded_character_sets {
+		/**
+		 * Namespace reserved for private use of coded character set implementations.
+		*/
+		namespace detail { }
+	}
+}
+
+
+#include "coded_character_set.tpp"

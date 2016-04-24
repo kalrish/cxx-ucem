@@ -1,0 +1,20 @@
+/**
+ * @file
+ * Version information.
+*/
+
+/**
+ * Framework version.
+ * 
+ * A nonnegative integer. Used to signal interface-breaking changes.
+*/
+#define UNICODE_CHARACTER_ENCODING_MODEL_VERSION \
+	1
+
+/**
+ * Revision version.
+ * 
+ * A nonnegative integer. Used to signal small changes.
+*/
+#define UNICODE_CHARACTER_ENCODING_MODEL_REVISION \
+	0

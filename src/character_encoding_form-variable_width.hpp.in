@@ -1,0 +1,304 @@
+#include <cstddef>
+
+#include <tuple>
+
+#include "character_encoding_form.hpp"
+
+
+namespace Unicode_CharacterEncodingModel {
+	namespace detail {
+		/**
+		 * Thrown when a code unit sequence is incomplete.
+		*/
+		template<
+		 typename sequence_length,
+		 std::size_t MaxSequenceLength,
+		 class ill_formed
+		>
+		struct incomplete final :
+			ill_formed
+		{
+			/**
+			 * How many more code units are needed.
+			*/
+			sequence_length
+				needed;
+		};
+		
+		/**
+		 * Specialization for the case in which the maximum sequence length is 2.
+		 * The only difference is that there's no field specifying how many more
+		 * code units are needed, as it would be redundant: when the maximum
+		 * sequence length is 2 and not enough code units have been supplied,
+		 * the only possibility is that one code unit is missing.
+		*/ 
+		template<
+		 typename sequence_length,
+		 class ill_formed
+		>
+		struct incomplete<
+		 sequence_length,
+		 2,
+		 ill_formed
+		> final :
+			ill_formed
+		{ };
+	}
+	
+	/**
+	 * Base class for variable width character encoding forms.
+	 * 
+	 * Variable width character encoding form implementations should derive from
+	 * this class.
+	 * 
+	 * @tparam Derived               The class that derives from this class.
+	 * @tparam Min                   The minimum nonnegative integer that the
+	 *                                  character encoding form maps.
+	 * @tparam Max                   The maximum nonnegative integer that the
+	 *                                  character encoding form maps.
+	 * @tparam CodeUnitWidth         The binary width occupied by each code unit.
+	 * @tparam MaxSequenceLength     The maximum number of code units a single
+	 *                                  code point may be mapped to.
+	*/
+	template<
+	 class Derived,
+	 unsigned long long Min,
+	 unsigned long long Max,
+	 std::size_t CodeUnitWidth,
+	 std::size_t MinSequenceLength,
+	 std::size_t MaxSequenceLength
+	>
+	class CharacterEncodingForm_VariableWidth :
+		public CharacterEncodingForm<
+		 Derived,
+		 Min,
+		 Max,
+		 CodeUnitWidth
+		>
+	{
+		static_assert( MinSequenceLength > 0 , "code unit sequences mapped by the character encoding form must be at least one code unit long" );
+		static_assert( MaxSequenceLength > MinSequenceLength , "the maximum length of code unit sequences mapped by the character encoding form must be greater than the minimum" );
+		
+		public:
+			/**
+			 * Unsigned integer type capable of holding the length of any code unit
+			 *    sequence.
+			 * 
+			 * This type is used to represent the length of sequences of code units.
+			 * units.
+			*/
+			using sequence_length =
+				typename detail::select_uint_holding_up_to<MaxSequenceLength>::type;
+			
+			/**
+			 * Thrown when a code unit sequence is incomplete.
+			*/
+			using incomplete =
+				detail::incomplete<
+				 sequence_length,
+				 MaxSequenceLength,
+				 typename CharacterEncodingForm_VariableWidth::ill_formed 
+				>;
+		
+		public:
+			/**
+			 * Minimum length of code unit sequences mapped by the character encoding
+			 *    form.
+			*/
+			static constexpr sequence_length
+				min_sequence_length = MinSequenceLength;
+			/**
+			 * Maximum length of code unit sequences mapped by the character encoding
+			 *    form.
+			*/
+			static constexpr sequence_length
+				max_sequence_length = MaxSequenceLength;
+		
+		public:
+			/**
+			 * Decode a code unit sequence with error checking.
+			 * 
+			 * @param[in] read_cursor     A pointer pointing to a sequence of enough
+			 *                               code units.
+			 * 
+			 * @return A [`std::tuple`](http://en.cppreference.com/w/cpp/utility/tuple)
+			 *    whose first element is the decoded nonnegative integer and whose
+			 *    second element is the number of code units consumed in the operation.
+			 * 
+			 * @remark The helper [`std::tie`](http://en.cppreference.com/w/cpp/utility/tuple/tie)
+			 * can make working with the return values easier.
+			 * 
+			 * @include CEF-VW-decode.cpp
+			*/
+			[[gnu::nonnull,gnu::pure]]
+			static std::tuple<
+			 typename CharacterEncodingForm_VariableWidth::nonnegative_integer,
+			 sequence_length
+			>
+				decode
+				(
+				 const typename CharacterEncodingForm_VariableWidth::code_unit * read_cursor
+				) noexcept( noexcept( Derived::_decode(read_cursor) ) );
+			/**
+			 * Decode a code unit sequence assuming that it is valid.
+			 * 
+			 * @warning This method assumes input to be valid.
+			 * 
+			 * @param[in] read_cursor     A pointer pointing to a sequence of enough
+			 *                               code units.
+			 * 
+			 * @return A [`std::tuple`](http://en.cppreference.com/w/cpp/utility/tuple)
+			 *    whose first element is the decoded nonnegative integer and whose
+			 *    second element is the number of code units consumed in the operation.
+			 * 
+			 * @remark The helper [`std::tie`](http://en.cppreference.com/w/cpp/utility/tuple/tie)
+			 * can make working with the return values easier.
+			*/
+			[[gnu::nonnull,gnu::pure]]
+			static std::tuple<
+			 typename CharacterEncodingForm_VariableWidth::nonnegative_integer,
+			 sequence_length
+			>
+				decode_assuming_validity
+				(
+				 const typename CharacterEncodingForm_VariableWidth::code_unit * read_cursor
+				) noexcept;
+			/**
+			 * Decode a code unit sequence statically and assuming that it is valid.
+			 * 
+			 * @copydoc constexpry_methods_notice
+			 * 
+			 * @warning This method assumes input to be valid.
+			 * 
+			 * @param[in] read_cursor     A pointer pointing to a sequence of enough
+			 *                               code units.
+			 * 
+			 * @return A [`std::tuple`](http://en.cppreference.com/w/cpp/utility/tuple)
+			 *    whose first element is the decoded nonnegative integer and whose
+			 *    second element is the number of code units consumed in the operation.
+			 * 
+			 * @remark The helper [`std::tie`](http://en.cppreference.com/w/cpp/utility/tuple/tie)
+			 * can make working with the return values easier.
+			*/
+			static constexpr std::tuple<
+			 typename CharacterEncodingForm_VariableWidth::nonnegative_integer,
+			 sequence_length
+			>
+				decode_constexpry
+				(
+				 const typename CharacterEncodingForm_VariableWidth::code_unit * read_cursor
+				) noexcept;
+			/**
+			 * Decode a sequence of code units into a nonnegative integer with bounds
+			 *    checking.
+			 * 
+			 * @param[in] read_cursor         A pointer pointing to a sequence of code
+			 *                                   units.
+			 * @param[in] code_units_left     How many code units are available for
+			 *                                   reading.
+			 * 
+			 * @throw #incomplete     If not enough code units are supplied.
+			 * 
+			 * @return A [`std::tuple`](http://en.cppreference.com/w/cpp/utility/tuple)
+			 *    whose first element is the decoded nonnegative integer and whose
+			 *    second element is the number of code units consumed in the operation.
+			 * 
+			 * @remark The helper [`std::tie`](http://en.cppreference.com/w/cpp/utility/tuple/tie)
+			 * can make working with the return values easier.
+			*/
+			[[gnu::nonnull,gnu::pure]]
+			static std::tuple<
+			 typename CharacterEncodingForm_VariableWidth::nonnegative_integer,
+			 sequence_length
+			>
+				decode
+				(
+				 const typename CharacterEncodingForm_VariableWidth::code_unit * read_cursor,
+				 sequence_length code_units_left
+				);
+			
+			/**
+			 * Compute the length of the code unit sequence corresponding to a
+			 *    nonnegative integer.
+			 * 
+			 * @param[in] i     The nonnegative integer to check. It must be mapped by
+			 *                     the character encoding form.
+			 * 
+			 * @return How many code units the given nonnegative integer would be
+			 *    encoded in.
+			*/
+			[[gnu::const]]
+			static sequence_length
+				encoded_length
+				(
+				 typename CharacterEncodingForm_VariableWidth::nonnegative_integer i
+				) noexcept;
+			/**
+			 * Compute the length of the code unit sequence corresponding to a
+			 *    nonnegative integer.
+			 * 
+			 * @copydoc constexpry_methods_notice
+			 * 
+			 * @param[in] i     The nonnegative integer to check. It must be mapped by
+			 *                     the character encoding form.
+			 * 
+			 * @return How many code units the given nonnegative integer would be
+			 *    encoded in.
+			*/
+			static constexpr sequence_length
+				encoded_length_constexpry
+				(
+				 typename CharacterEncodingForm_VariableWidth::nonnegative_integer i
+				) noexcept;
+			
+			/**
+			 * Encode a nonnegative integer into a sequence of code units.
+			 * 
+			 * @param[in]  i       The nonnegative integer to encode. It must be
+			 *                        mapped by the character encoding form.
+			 * @param[out] out     A pointer pointing to an output buffer of code
+			 *                        units with size equal to or greater than the
+			 *                        number of code units the given code point is
+			 *                        encoded in.
+			 * 
+			 * @note Pre-allocating a buffer big enough to hold the number of code
+			 * units of the longest sequence mapped by the character encoding form
+			 * (#max_sequence_length) is more efficient than computing the length of
+			 * the code unit sequence that corresponds to each of the nonnegative
+			 * integers to be encoded. Moreover, that way the array may be allocated
+			 * on the stack with ease.
+			 * 
+			 * @return How many code units the given code point was encoded in.
+			*/
+			[[gnu::nonnull]]
+			static sequence_length
+				encode
+				(
+				 typename CharacterEncodingForm_VariableWidth::nonnegative_integer i,
+				 typename CharacterEncodingForm_VariableWidth::code_unit * out
+				) noexcept;
+			/**
+			 * Encode a nonnegative integer into a sequence of code units.
+			 * 
+			 * @copydoc constexpry_methods_notice
+			 * 
+			 * @param[in]  i       The nonnegative integer to encode. It must be
+			 *                        mapped by the character encoding form.
+			 * @param[out] out     A pointer pointing to an output buffer of code
+			 *                        units with size equal to or greater than the
+			 *                        number of code units the given code point is
+			 *                        encoded in.
+			 * 
+			 * @return How many code units the given code point was encoded in.
+			*/
+			static constexpr sequence_length
+				encode_constexpry
+				(
+				 typename CharacterEncodingForm_VariableWidth::nonnegative_integer i,
+				 typename CharacterEncodingForm_VariableWidth::code_unit * out
+				) noexcept;
+	};
+}
+
+
+#include "character_encoding_form-variable_width.tpp"

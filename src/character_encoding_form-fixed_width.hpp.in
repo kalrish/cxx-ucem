@@ -1,0 +1,136 @@
+#include <cstddef>
+
+#include "character_encoding_form.hpp"
+
+
+namespace Unicode_CharacterEncodingModel {
+	/**
+	 * Base class for fixed width character encoding forms.
+	 * 
+	 * Fixed width character encoding form implementations should derive from
+	 * this class.
+	 * 
+	 * @tparam Derived            The class that derives from this class.
+	 * @tparam Min                The minimum nonnegative integer that the
+	 *                               character encoding form maps.
+	 * @tparam Max                The maximum nonnegative integer that the
+	 *                               character encoding form maps.
+	 * @tparam CodeUnitWidth      The width (number of bits) occupied by each
+	 *                               code unit.
+	 * @tparam SequenceLength     The number of code units each code point is
+	 *                               mapped to.
+	*/
+	template<
+	 class Derived,
+	 unsigned long long Min,
+	 unsigned long long Max,
+	 std::size_t CodeUnitWidth,
+	 std::size_t SequenceLength
+	>
+	class CharacterEncodingForm_FixedWidth :
+		public CharacterEncodingForm<
+		 Derived,
+		 Min,
+		 Max,
+		 CodeUnitWidth
+		>
+	{
+		static_assert( SequenceLength > 0 , "code unit sequences mapped by the character encoding form must be at least one code unit long" );
+		
+		public:
+			/**
+			 * Length of code unit sequences mapped by the character encoding form.
+			*/
+			static constexpr auto
+				sequence_length = SequenceLength;
+		
+		public:
+			/**
+			 * Decode a sequence of code units into a nonnegative integer with error checking.
+			 * 
+			 * @param[in] read_cursor     A pointer pointing to a sequence of
+			 *                               #sequence_length or more code units.
+			 * 
+			 * @return The nonnegative integer that the given code unit sequence is
+			 *    mapped to by the character encoding form.
+			*/
+			[[gnu::nonnull,gnu::pure]]
+			static typename CharacterEncodingForm_FixedWidth::nonnegative_integer
+				decode
+				(
+				 const typename CharacterEncodingForm_FixedWidth::code_unit * read_cursor
+				) noexcept( noexcept( Derived::_decode(read_cursor) ) );
+			/**
+			 * Decode a sequence of code units into a nonnegative integer assuming
+			 *    validity.
+			 * 
+			 * @warning This method assumes input to be valid.
+			 * 
+			 * @param[in] read_cursor     A pointer pointing to a sequence of
+			 *                               #sequence_length or more code units.
+			 * 
+			 * @return The nonnegative integer that the given code unit sequence is
+			 *    mapped to by the character encoding form.
+			*/
+			[[gnu::nonnull,gnu::pure]]
+			static typename CharacterEncodingForm_FixedWidth::nonnegative_integer
+				decode_assuming_validity
+				(
+				 const typename CharacterEncodingForm_FixedWidth::code_unit * read_cursor
+				) noexcept;
+			/**
+			 * Decode a sequence of code units into a nonnegative integer assuming
+			 *    validity.
+			 * 
+			 * @copydoc constexpry_methods_notice
+			 * 
+			 * @warning This method assumes input to be valid.
+			 * 
+			 * @param[in] read_cursor     A pointer pointing to a sequence of
+			 *                               #sequence_length or more code units.
+			 * 
+			 * @return The nonnegative integer that the given code unit sequence is
+			 *     mapped to by the character encoding form.
+			*/
+			static constexpr typename CharacterEncodingForm_FixedWidth::nonnegative_integer
+				decode_constexpry
+				(
+				 const typename CharacterEncodingForm_FixedWidth::code_unit * read_cursor
+				) noexcept;
+			
+			/**
+			 * Encode a nonnegative integer into a sequence of code units.
+			 * 
+			 * @param[in]  i       The nonnegative integer to encode. It must be mapped
+			 *                        by the character encoding form.
+			 * @param[out] out     A pointer pointing to an output buffer of code units
+			 *                        with size equal to or greater than #sequence_length.
+			*/
+			[[gnu::nonnull]]
+			static void
+				encode
+				(
+				 typename CharacterEncodingForm_FixedWidth::nonnegative_integer i,
+				 typename CharacterEncodingForm_FixedWidth::code_unit * out
+				) noexcept;
+			/**
+			 * Encode a nonnegative integer into a sequence of code units.
+			 * 
+			 * @copydoc constexpry_methods_notice
+			 * 
+			 * @param[in]  i       The nonnegative integer to encode. It must be mapped
+			 *                        by the character encoding form.
+			 * @param[out] out     A pointer pointing to an output buffer of code units
+			 *                        with size equal to or greater than #sequence_length.
+			*/
+			static constexpr void
+				encode_constexpry
+				(
+				 typename CharacterEncodingForm_FixedWidth::nonnegative_integer i,
+				 typename CharacterEncodingForm_FixedWidth::code_unit * out
+				) noexcept;
+	};
+}
+
+
+#include "character_encoding_form-fixed_width.tpp"

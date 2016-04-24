@@ -1,0 +1,142 @@
+#include <cstddef>
+#include <climits>
+
+#include "detail.hpp"
+
+
+namespace Unicode_CharacterEncodingModel {
+	/**
+	 * Base class for character encoding forms.
+	 * 
+	 * Character encoding form implementations should not derive from this
+	 * class; instead, they should derive from CharacterEncodingForm_FixedWidth
+	 * or CharacterEncodingForm_VariableWidth.
+	 * 
+	 * @tparam Derived           The class that derives from this class.
+	 * @tparam Min               The minimum nonnegative integer that the character
+	 *                              encoding form maps.
+	 * @tparam Max               The maximum nonnegative integer that the character
+	 *                              encoding form maps.
+	 * @tparam CodeUnitWidth     The binary width occupied by each code unit.
+	*/
+	template<
+	 class Derived,
+	 unsigned long long Min,
+	 unsigned long long Max,
+	 std::size_t CodeUnitWidth
+	>
+	class CharacterEncodingForm
+	{
+		static_assert( Max > Min , "the maximum nonnegative integer that a character encoding form maps must be greater than the minimum" );
+		
+		public:
+			/**
+			 * Unsigned integer type capable of holding any of the nonnegative integers
+			 *    that the character encoding form maps.
+			*/
+			using nonnegative_integer =
+				typename detail::select_uint_holding_up_to<Max>::type;
+			
+			/**
+			 * Unsigned integer type capable of holding any of the values that code
+			 *    units may take.
+			 * 
+			 * @note This type might be capable of holding values not handled by the
+			 * character encoding form. For example, on a system where bytes are 8-bit
+			 * wide, a character encoding form that worked with code units 7-bit wide
+			 * would get a type with at least 8 bits.
+			*/
+			using code_unit =
+				typename detail::select_appropriate_code_unit<detail::round_to_byte_multiple(CodeUnitWidth)>::type;
+			
+			/**
+			 * Base type for exceptions thrown when trying to decode an ill-formed code
+			 *    unit sequence.
+			 * 
+			 * Component implementations may provide more specialized error classes
+			 * that follow their peculiar error conditions. In any case, they must
+			 * inherit from this struct.
+			*/
+			struct ill_formed
+			{ };
+		
+		public:
+			/**
+			 * The binary width occupied by each code unit.
+			*/
+			static constexpr auto
+				code_unit_width = CodeUnitWidth;
+			
+			/**
+			 * Minimum nonnegative integer that the coded character set maps.
+			 * 
+			 * @attention The set of nonnegative integers mapped by a character encoding
+			 * form may not be a contiguous range. Therefore, it would be wrong to check
+			 * whether a nonnegative integer is mapped by a character encoding form by
+			 * checking whether it is greater than or equal to the minimum value mapped
+			 * and equal to or less than the maximum value mapped; instead, use #maps.
+			*/
+			static constexpr auto
+				smallest_mapped_nonnegative_integer = Min;
+			/**
+			 * Maximum nonnegative integer that the coded character set maps.
+			 * 
+			 * @attention The set of nonnegative integers mapped by a character encoding
+			 * form may not be a contiguous range. Therefore, it would be wrong to check
+			 * whether a nonnegative integer is mapped by a character encoding form by
+			 * checking whether it is greater than or equal to the minimum value mapped
+			 * and equal to or less than the maximum value mapped; instead, use #maps.
+			*/
+			static constexpr auto
+				greatest_mapped_nonnegative_integer = Max;
+		
+		static_assert( sizeof(code_unit) * CHAR_BIT >= code_unit_width , "" );
+		
+		public:
+			CharacterEncodingForm
+				( )
+				= delete;
+			CharacterEncodingForm
+				(
+				 const CharacterEncodingForm &
+				)
+				= delete;
+			CharacterEncodingForm
+				(
+				 CharacterEncodingForm &&
+				)
+				= delete;
+			~CharacterEncodingForm
+				( )
+				= delete;
+			
+			/**
+			 * Check whether the character encoding form maps a nonnegative integer
+			 *    to a character.
+			 * 
+			 * @param[in] i     The nonnegative integer to check.
+			 * 
+			 * @return \c true if the character encoding form maps the given
+			 *    nonnegative integer; \c false otherwise.
+			*/
+			[[gnu::const]]
+			static bool
+				maps
+				(
+				 nonnegative_integer i
+				) noexcept;
+	};
+	
+	/**
+	 * Namespace reserved for character encoding form implementations.
+	*/
+	namespace character_encoding_forms {
+		/**
+		 * Namespace reserved for private use of character encoding form implementations.
+		*/
+		namespace detail { }
+	}
+}
+
+
+#include "character_encoding_form.tpp"

@@ -1,0 +1,10 @@
+/**
+ * @page userdefexamples Examples
+ * This page aims to provide a comprehensive list of examples on the use of the library.
+ *
+ * @section cef_fw Decoding with fixed-width character encoding forms
+ * @include CEF-full_decoder-FW.cpp
+ *
+ * @section cef_vw Decoding with variable-width character encoding forms
+ * @include CEF-full_decoder-VW.cpp
+*/

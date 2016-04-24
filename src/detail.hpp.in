@@ -1,0 +1,174 @@
+#include <cstddef>
+#include <cstdint>
+#include <climits> // CHAR_BIT
+
+
+namespace Unicode_CharacterEncodingModel {
+	namespace detail {
+		/**
+		 * Compute how many bytes are needed to store the given number of bits.
+		*/
+		constexpr std::size_t
+		round_to_byte_multiple
+		(
+		 std::size_t bits
+		)
+		noexcept
+		{
+			auto quotient = bits / CHAR_BIT;
+			auto remainder = bits % CHAR_BIT;
+			
+			return remainder == 0 ? quotient : quotient + 1;
+		}
+		
+		// http://stackoverflow.com/a/23782939/2207421
+		constexpr unsigned long long
+		floorlog2
+		(
+		 unsigned long long x
+		)
+		noexcept
+		{
+			return x == 1 ? 0 : 1 + floorlog2(x >> 1);
+		}
+		
+		// as above ^
+		constexpr unsigned long long
+		ceillog2
+		(
+		 unsigned long long x
+		)
+		noexcept
+		{
+			return x == 1 ? 0 : floorlog2(x - 1) + 1;
+		}
+		
+		
+		template<
+		 unsigned int Bytes
+		>
+		struct select_uint_by_bytes;
+		
+		template<>
+		struct select_uint_by_bytes<
+		 1
+		>
+		{
+			using type = std::uint_least8_t;
+		};
+		
+		template<>
+		struct select_uint_by_bytes<
+		 2
+		>
+		{
+			using type = std::uint_least16_t;
+		};
+		
+		template<>
+		struct select_uint_by_bytes<
+		 3
+		>
+		{
+			using type = std::uint_least32_t;
+		};
+		
+		template<>
+		struct select_uint_by_bytes<
+		 4
+		>
+		{
+			using type = std::uint_least32_t;
+		};
+		
+		template<>
+		struct select_uint_by_bytes<
+		 5
+		>
+		{
+			using type = std::uint_least64_t;
+		};
+		
+		template<>
+		struct select_uint_by_bytes<
+		 6
+		>
+		{
+			using type = std::uint_least64_t;
+		};
+		
+		template<>
+		struct select_uint_by_bytes<
+		 7
+		>
+		{
+			using type = std::uint_least64_t;
+		};
+		
+		template<>
+		struct select_uint_by_bytes<
+		 8
+		>
+		{
+			using type = std::uint_least64_t;
+		};
+		
+		
+		template<
+		 unsigned int BinaryWidth
+		>
+		struct select_uint_by_binary_width :
+			select_uint_by_bytes<
+			 round_to_byte_multiple(BinaryWidth)
+			>
+		{ };
+		
+		
+		template<
+		 unsigned long long Max
+		>
+		struct select_uint_holding_up_to final :
+			select_uint_by_binary_width<
+			 ceillog2(Max)
+			>
+		{ };
+		
+		
+		template<
+		 unsigned int Bytes
+		>
+		struct select_appropriate_code_unit;
+		
+		template<>
+		struct select_appropriate_code_unit<
+		 1
+		> final
+		{
+			using type = unsigned char;
+		};
+		
+		template<>
+		struct select_appropriate_code_unit<
+		 2
+		> final
+		{
+			using type = char16_t;
+		};
+		
+		template<>
+		struct select_appropriate_code_unit<
+		 3
+		> final
+		{
+			using type = char32_t;
+		};
+		
+		template<>
+		struct select_appropriate_code_unit<
+		 4
+		> final
+		{
+			using type = char32_t;
+		};
+	}
+}

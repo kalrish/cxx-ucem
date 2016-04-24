@@ -1,0 +1,16 @@
+/**
+ * @namespace Unicode_CharacterEncodingModel
+ * 
+ * General namespace.
+*/
+
+/**
+ * @namespace Unicode_CharacterEncodingModel::detail
+ * 
+ * Private namespace.
+*/
+
+/**
+ * @page license License
+ * @verbinclude LICENSE
+*/

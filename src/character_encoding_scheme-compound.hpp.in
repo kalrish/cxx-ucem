@@ -1,0 +1,26 @@
+#include "character_encoding_scheme.hpp"
+
+
+namespace Unicode_CharacterEncodingModel {
+	/**
+	 * Base class for compound character encoding schemes.
+	 * 
+	 * Compound character encoding scheme implementations should not derive from
+	 * this class; instead, they should derive from the appropriate abstraction
+	 * around their switching mechanism.
+	 * 
+	 * @tparam CodeUnitWidth     The binary width occupied by each code unit.
+	 * @tparam SimpleCESs        Simple character encoding schemes of which the
+	 *                              compound character enconding scheme is made
+	 *                              up.
+	*/
+	template<
+	 std::size_t CodeUnitWidth,
+	 class ... SimpleCESs
+	>
+	class CharacterEncodingScheme_Compound :
+		public CharacterEncodingScheme<
+		 CodeUnitWidth
+		>
+	{ };
+}

@@ -1,0 +1,94 @@
+#include "character_encoding_scheme.hpp"
+
+
+namespace Unicode_CharacterEncodingModel {
+	/**
+	 * Base class for simple character encoding schemes.
+	 * 
+	 * Simple character encoding scheme implementations should derive from this
+	 * class.
+	 * 
+	 * @tparam Derived           The class that derives from this class. It must
+	 *                              implement the simple character encoding scheme
+	 *                              interface.
+	 * @tparam CodeUnitWidth     The binary width (number of bits) occupied by
+	 *                              each code unit.
+	*/
+	template<
+	 class Derived,
+	 std::size_t CodeUnitWidth
+	>
+	class CharacterEncodingScheme_Simple :
+		public CharacterEncodingScheme<
+		 CodeUnitWidth
+		>
+	{
+		public:
+			/**
+			 * Deserialize a sequence of bytes into a code unit.
+			 * 
+			 * @param[in] read_cursor     A pointer pointing to a sequence of
+			 *                               bytes. At least #bytes_per_code_unit
+			 *                               bytes must be available for reading.
+			 * 
+			 * @return The code unit that the given byte sequence is mapped to by the
+			 *    character encoding scheme.
+			*/
+			[[gnu::nonnull,gnu::pure]]
+			static typename CharacterEncodingScheme_Simple::code_unit
+				deserialize
+				(
+				 const unsigned char * read_cursor
+				) noexcept;
+			/**
+			 * Deserialize a sequence of bytes into a code unit.
+			 * 
+			 * @copydoc constexpry_methods_notice
+			 * 
+			 * @param[in] read_cursor     A pointer pointing to a sequence of
+			 *                               bytes. At least #bytes_per_code_unit
+			 *                               bytes must be available for reading.
+			 * 
+			 * @return The code unit that the given byte sequence is mapped to by the
+			 *    character encoding scheme.
+			*/
+			static constexpr typename CharacterEncodingScheme_Simple::code_unit
+				deserialize_constexpry
+				(
+				 const unsigned char * read_cursor
+				) noexcept;
+			
+			/**
+			 * Serialize a code unit into a sequence of bytes.
+			 * 
+			 * @param[in] cu       The code unit to serialize.
+			 * @param[out] out     A pointer pointing to a buffer of bytes with size
+			 *                        equal to or greater than #bytes_per_code_unit.
+			*/
+			[[gnu::nonnull]]
+			static void
+				serialize
+				(
+				 typename CharacterEncodingScheme_Simple::code_unit cu,
+				 unsigned char * out
+				) noexcept;
+			/**
+			 * Serialize a code unit into a sequence of bytes.
+			 * 
+			 * @copydoc constexpry_methods_notice
+			 * 
+			 * @param[in] cu       The code unit to serialize.
+			 * @param[out] out     A pointer pointing to a buffer of bytes with size
+			 *                        equal to or greater than #bytes_per_code_unit.
+			*/
+			static constexpr void
+				serialize_constexpry
+				(
+				 typename CharacterEncodingScheme_Simple::code_unit cu,
+				 unsigned char * out
+				) noexcept;
+	};
+}
+
+
+#include "character_encoding_scheme-simple.tpp"

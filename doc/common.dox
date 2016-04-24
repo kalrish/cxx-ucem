@@ -1,0 +1,5 @@
+/**
+ * @defgroup constexpry_methods_notice Dummy
+ * @attention This method is not meant to be used at runtime. It lacks
+ * error checking and could be very slow.
+*/

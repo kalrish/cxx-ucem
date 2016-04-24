@@ -1,0 +1,198 @@
+#include "character_encoding_scheme-compound.hpp"
+
+
+namespace Unicode_CharacterEncodingModel {
+	/**
+	 * Base class for compound character encoding schemes that employ a byte
+	 *    order mark as their switching mechanism.
+	 * 
+	 * Compound character encoding scheme implementations that employ a byte
+	 * order mark as their switching mechanism should derive from this class.
+	 * 
+	 * @tparam CEF               The character encoding form that this character
+	 *                              encoding scheme is associated with.
+	 * @tparam SCES_BE           The simple character encoding scheme to use when
+	 *                              the byte order mark specifies big endianness.
+	 * @tparam SCES_LE           The simple character encoding scheme to use when
+	 *                              the byte order mark specifies little
+	 *                              endianness.
+	*/
+	template<
+	 class CEF,
+	 class SCES_BE,
+	 class SCES_LE
+	>
+	class CharacterEncodingScheme_Compound_ByteOrderMark :
+		public CharacterEncodingScheme_Compound<
+		 CEF::code_unit_width
+		>
+	{
+		static_assert( CEF::code_unit_width == SCES_BE::code_unit_width,
+			"the CEF and the big-endian CES use different code units" );
+		static_assert( CEF::code_unit_width == SCES_LE::code_unit_width,
+			"the CEF and the little-endian CES use different code units" );
+		
+		public:
+			/**
+			 * Simple character encoding scheme to use when the BOM specifies big
+			 *    endianness.
+			*/
+			using SimpleCharacterEncodingScheme_BigEndian =
+				SCES_BE;
+			/**
+			 * Simple character encoding scheme to use when the BOM specifies little
+			 *    endianness.
+			*/
+			using SimpleCharacterEncodingScheme_LittleEndian =
+				SCES_LE;
+			/**
+			 * Simple character encoding scheme to use when there's no BOM.
+			 * 
+			 * @note Although the Unicode standard mandates that big-endian be the
+			 * default when there is no BOM, most programs use little-endian in that
+			 * case.
+			*/
+			using SimpleCharacterEncodingScheme_default =
+				SimpleCharacterEncodingScheme_BigEndian;
+		
+		public:
+			/**
+			 * Code point corresponding to the character used as the byte order mark.
+			 * 
+			 * @note This is a mere constant exported just for reference.
+			*/
+			static constexpr typename CEF::nonnegative_integer
+				ByteOrderMark_code_point = 0xFEFF;
+		
+		private:
+			// exploit SFINAE to get the lenght of the code unit sequence mapped to the BOM code point
+			template<
+			 class FixedWidthCEF,
+			 class = void
+			>
+			struct length_of_the_code_unit_sequence_the_BOM_is_mapped_to_computer final
+			{
+				static constexpr auto value =
+					FixedWidthCEF::sequence_length;
+			};
+			
+			template<
+			 class VariableWidthCEF
+			>
+			struct length_of_the_code_unit_sequence_the_BOM_is_mapped_to_computer<
+			 VariableWidthCEF,
+			 decltype( void(VariableWidthCEF::encoded_length_constexpry( ByteOrderMark_code_point ) ) )
+			> final
+			{
+				static constexpr auto value =
+					VariableWidthCEF::encoded_length_constexpry( ByteOrderMark_code_point );
+			};
+			
+			static constexpr auto
+				length_of_the_code_unit_sequence_the_BOM_is_mapped_to = length_of_the_code_unit_sequence_the_BOM_is_mapped_to_computer<
+				 CEF
+				>::value;
+		
+		public:
+			/**
+			 * Size of the byte order mark, in bytes.
+			*/
+			static constexpr std::size_t
+				ByteOrderMark_size = length_of_the_code_unit_sequence_the_BOM_is_mapped_to * SimpleCharacterEncodingScheme_default::bytes_per_code_unit;
+		
+		private:
+			// This is basically a more-constexpr-friendly array (std::array is surprisingly constexpr-unfriendly, hence it wasn't used)
+			template<
+			 class SimpleCES
+			>
+			struct array_wrapper final
+			{
+				// Holds the serialized BOM
+				unsigned char
+					array[ ByteOrderMark_size ];
+			};
+			
+			// Serializes the BOM at compile time, returning it in an array_wrapper
+			template<
+			 class SimpleCES
+			>
+			static constexpr array_wrapper<SimpleCES>
+			compute_BOM
+			( )
+			noexcept
+			{
+				array_wrapper<SimpleCES> t = {};
+				
+				typename CEF::code_unit code_unit_buffer[ length_of_the_code_unit_sequence_the_BOM_is_mapped_to ] = {};
+				CEF::encode_constexpry( ByteOrderMark_code_point , code_unit_buffer );
+				
+				unsigned char * p = t.array;
+				
+				for ( auto i = 0u ; i < length_of_the_code_unit_sequence_the_BOM_is_mapped_to ; ++i )
+				{
+					SimpleCES::serialize_constexpry( code_unit_buffer[i] , p );
+					p += SimpleCES::bytes_per_code_unit;
+				}
+				
+				return t;
+			}
+			
+			// These must be held
+			static constexpr array_wrapper<SimpleCharacterEncodingScheme_BigEndian>
+				BOM_BE_wrapper = compute_BOM<SimpleCharacterEncodingScheme_BigEndian>();
+			static constexpr array_wrapper<SimpleCharacterEncodingScheme_LittleEndian>
+				BOM_LE_wrapper = compute_BOM<SimpleCharacterEncodingScheme_LittleEndian>();
+		
+		public:
+			/**
+			 * Byte sequence that signals big endianness.
+			 * 
+			 * While not a true byte array, it may be accessed as such, so the usual methods (e.g. [`std::equal`](http://en.cppreference.com/w/cpp/algorithm/equal) or [`std::memcmp`](http://en.cppreference.com/w/cpp/string/byte/memcmp)) can be employed to compare the start of the encoded text stream against it.
+			*/
+			static constexpr auto &
+				ByteOrderMark_BigEndian = BOM_BE_wrapper.array;
+			/**
+			 * Byte sequence that signals little endianness.
+			 * 
+			 * While not a true byte array, it may be accessed as such, so the usual methods (e.g. [`std::equal`](http://en.cppreference.com/w/cpp/algorithm/equal) or [`std::memcmp`](http://en.cppreference.com/w/cpp/string/byte/memcmp)) can be employed to compare the start of the encoded text stream against it.
+			*/
+			static constexpr auto &
+				ByteOrderMark_LittleEndian = BOM_LE_wrapper.array;
+	};
+	
+	template<
+	class CEF,
+	class SCES_BE,
+	class SCES_LE
+	>
+	constexpr typename CharacterEncodingScheme_Compound_ByteOrderMark<
+	 CEF,
+	 SCES_BE,
+	 SCES_LE
+	>::template array_wrapper<
+	 SCES_BE
+	>
+	CharacterEncodingScheme_Compound_ByteOrderMark<
+	 CEF,
+	 SCES_BE,
+	 SCES_LE
+	>::BOM_BE_wrapper;
+	
+	template<
+	class CEF,
+	class SCES_BE,
+	class SCES_LE
+	>
+	constexpr typename CharacterEncodingScheme_Compound_ByteOrderMark<
+	 CEF,
+	 SCES_BE,
+	 SCES_LE
+	>::template array_wrapper<
+	 SCES_LE
+	>
+	CharacterEncodingScheme_Compound_ByteOrderMark<
+	 CEF,
+	 SCES_BE,
+	 SCES_LE
+	>::BOM_LE_wrapper;
+}
