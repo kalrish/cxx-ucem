@@ -69,14 +69,12 @@
 <div class="dynheader">
 Inheritance diagram for Unicode_CharacterEncodingModel::CharacterEncodingScheme_Compound_ByteOrderMark&lt; CEF, SCES_BE, SCES_LE &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark__inherit__graph.svg" width="858" height="82"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark__inherit__graph.svg" width="858" height="82"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for Unicode_CharacterEncodingModel::CharacterEncodingScheme_Compound_ByteOrderMark&lt; CEF, SCES_BE, SCES_LE &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark__coll__graph.svg" width="858" height="82"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark__coll__graph.svg" width="858" height="82"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
@@ -102,7 +100,7 @@ Static Public Attributes</h2></td></tr>
 <tr class="memdesc:a3c8d25ba698aaf607ed3eb3cf7c86a58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code point corresponding to the character used as the byte order mark.  <a href="#a3c8d25ba698aaf607ed3eb3cf7c86a58">More...</a><br /></td></tr>
 <tr class="separator:a3c8d25ba698aaf607ed3eb3cf7c86a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae03de8929700e93ce8ede12385cd218b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae03de8929700e93ce8ede12385cd218b"></a>
-static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark.html#ae03de8929700e93ce8ede12385cd218b">ByteOrderMark_size</a> = length_of_the_code_unit_sequence_the_BOM_is_mapped_to * SimpleCharacterEncodingScheme_default::bytes_per_code_unit</td></tr>
+static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark.html#ae03de8929700e93ce8ede12385cd218b">ByteOrderMark_size</a> = length_of_the_code_unit_sequence_the_BOM_is_mapped_to * sizeof(SimpleCharacterEncodingScheme_default::code_unit)</td></tr>
 <tr class="memdesc:ae03de8929700e93ce8ede12385cd218b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the byte order mark, in bytes. <br /></td></tr>
 <tr class="separator:ae03de8929700e93ce8ede12385cd218b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ea2f235f5f72bf18800f64858fa17b9"><td class="memItemLeft" align="right" valign="top">static constexpr auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__Compound__ByteOrderMark.html#a0ea2f235f5f72bf18800f64858fa17b9">ByteOrderMark_BigEndian</a> = BOM_BE_wrapper.array</td></tr>
@@ -115,9 +113,6 @@ static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom">
 static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme.html#a8545f1e1d2ea7e83542408da44ba5390">code_unit_width</a> = CodeUnitWidth</td></tr>
 <tr class="memdesc:a8545f1e1d2ea7e83542408da44ba5390"><td class="mdescLeft">&#160;</td><td class="mdescRight">The binary width occupied by each code unit. <br /></td></tr>
 <tr class="separator:a8545f1e1d2ea7e83542408da44ba5390"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a734fc3f4bd23cd9cd94313a8d24674a6"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme.html#a734fc3f4bd23cd9cd94313a8d24674a6">bytes_per_code_unit</a> = detail::round_to_byte_multiple(CodeUnitWidth)</td></tr>
-<tr class="memdesc:a734fc3f4bd23cd9cd94313a8d24674a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of bytes occupied by each code unit.  <a href="#a734fc3f4bd23cd9cd94313a8d24674a6">More...</a><br /></td></tr>
-<tr class="separator:a734fc3f4bd23cd9cd94313a8d24674a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;class CEF, class SCES_BE, class SCES_LE&gt;<br />
@@ -249,31 +244,6 @@ template&lt;class CEF , class SCES_BE , class SCES_LE &gt; </div>
 
 <p>Byte sequence that signals little endianness. </p>
 <p>While not a true byte array, it may be accessed as such, so the usual methods (e.g. <a href="http://en.cppreference.com/w/cpp/algorithm/equal"><code>std::equal</code></a> or <a href="http://en.cppreference.com/w/cpp/string/byte/memcmp"><code>std::memcmp</code></a>) can be employed to compare the start of the encoded text stream against it. </p>
-
-</div>
-</div>
-<a class="anchor" id="a734fc3f4bd23cd9cd94313a8d24674a6"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;std::size_t CodeUnitWidth&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme.html">Unicode_CharacterEncodingModel::CharacterEncodingScheme</a>&lt; CodeUnitWidth &gt;::bytes_per_code_unit = detail::round_to_byte_multiple(CodeUnitWidth)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The number of bytes occupied by each code unit. </p>
-<dl class="section note"><dt>Note</dt><dd>The number of bits taken up by each byte is system-dependent. Consider, for example, the UTF-16BE simple character encoding scheme: its code units, which are 16 bits wide, would occupy two bytes on a system with 8-bit bytes, but just one on another with 16-bit bytes. </dd></dl>
 
 </div>
 </div>

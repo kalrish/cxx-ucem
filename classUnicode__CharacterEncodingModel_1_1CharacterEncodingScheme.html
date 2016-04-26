@@ -69,8 +69,7 @@
 <div class="dynheader">
 Inheritance diagram for Unicode_CharacterEncodingModel::CharacterEncodingScheme&lt; CodeUnitWidth &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__inherit__graph.svg" width="838" height="235"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme__inherit__graph.svg" width="838" height="235"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
@@ -94,9 +93,6 @@ Static Public Attributes</h2></td></tr>
 static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme.html#a8545f1e1d2ea7e83542408da44ba5390">code_unit_width</a> = CodeUnitWidth</td></tr>
 <tr class="memdesc:a8545f1e1d2ea7e83542408da44ba5390"><td class="mdescLeft">&#160;</td><td class="mdescRight">The binary width occupied by each code unit. <br /></td></tr>
 <tr class="separator:a8545f1e1d2ea7e83542408da44ba5390"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a734fc3f4bd23cd9cd94313a8d24674a6"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme.html#a734fc3f4bd23cd9cd94313a8d24674a6">bytes_per_code_unit</a> = detail::round_to_byte_multiple(CodeUnitWidth)</td></tr>
-<tr class="memdesc:a734fc3f4bd23cd9cd94313a8d24674a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of bytes occupied by each code unit.  <a href="#a734fc3f4bd23cd9cd94313a8d24674a6">More...</a><br /></td></tr>
-<tr class="separator:a734fc3f4bd23cd9cd94313a8d24674a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;std::size_t CodeUnitWidth&gt;<br />
@@ -125,32 +121,6 @@ template&lt;std::size_t CodeUnitWidth&gt; </div>
 
 <p>Integer type capable of holding any of the values that code units mapped by the character encoding scheme may take. </p>
 <dl class="section note"><dt>Note</dt><dd>This type might be capable of holding values not handled by the character encoding scheme. For example, on a system where bytes had 8 bits each, a character encoding scheme that worked with code units 7-bit wide would get a type with at least 8 bits. </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a734fc3f4bd23cd9cd94313a8d24674a6"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;std::size_t CodeUnitWidth&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="classUnicode__CharacterEncodingModel_1_1CharacterEncodingScheme.html">Unicode_CharacterEncodingModel::CharacterEncodingScheme</a>&lt; CodeUnitWidth &gt;::bytes_per_code_unit = detail::round_to_byte_multiple(CodeUnitWidth)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The number of bytes occupied by each code unit. </p>
-<dl class="section note"><dt>Note</dt><dd>The number of bits taken up by each byte is system-dependent. Consider, for example, the UTF-16BE simple character encoding scheme: its code units, which are 16 bits wide, would occupy two bytes on a system with 8-bit bytes, but just one on another with 16-bit bytes. </dd></dl>
 
 </div>
 </div>
