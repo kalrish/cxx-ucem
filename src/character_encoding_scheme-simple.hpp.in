@@ -28,8 +28,8 @@ namespace Unicode_CharacterEncodingModel {
 			 * Deserialize a sequence of bytes into a code unit.
 			 * 
 			 * @param[in] read_cursor     A pointer pointing to a sequence of
-			 *                               bytes. At least #bytes_per_code_unit
-			 *                               bytes must be available for reading.
+			 *                               bytes. At least `sizeof(code_unit)` bytes
+			 *                               must be available for reading.
 			 * 
 			 * @return The code unit that the given byte sequence is mapped to by the
 			 *    character encoding scheme.
@@ -46,8 +46,8 @@ namespace Unicode_CharacterEncodingModel {
 			 * @copydoc constexpry_methods_notice
 			 * 
 			 * @param[in] read_cursor     A pointer pointing to a sequence of
-			 *                               bytes. At least #bytes_per_code_unit
-			 *                               bytes must be available for reading.
+			 *                               bytes. At least `sizeof(code_unit)` bytes
+			 *                               must be available for reading.
 			 * 
 			 * @return The code unit that the given byte sequence is mapped to by the
 			 *    character encoding scheme.
@@ -63,7 +63,7 @@ namespace Unicode_CharacterEncodingModel {
 			 * 
 			 * @param[in] cu       The code unit to serialize.
 			 * @param[out] out     A pointer pointing to a buffer of bytes with size
-			 *                        equal to or greater than #bytes_per_code_unit.
+			 *                        equal to or greater than `sizeof(code_unit)`.
 			*/
 			[[gnu::nonnull]]
 			static void
@@ -79,7 +79,7 @@ namespace Unicode_CharacterEncodingModel {
 			 * 
 			 * @param[in] cu       The code unit to serialize.
 			 * @param[out] out     A pointer pointing to a buffer of bytes with size
-			 *                        equal to or greater than #bytes_per_code_unit.
+			 *                        equal to or greater than `sizeof(code_unit)`.
 			*/
 			static constexpr void
 				serialize_constexpry

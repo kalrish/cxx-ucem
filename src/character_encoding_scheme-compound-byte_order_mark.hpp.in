@@ -98,7 +98,7 @@ namespace Unicode_CharacterEncodingModel {
 			 * Size of the byte order mark, in bytes.
 			*/
 			static constexpr std::size_t
-				ByteOrderMark_size = length_of_the_code_unit_sequence_the_BOM_is_mapped_to * SimpleCharacterEncodingScheme_default::bytes_per_code_unit;
+				ByteOrderMark_size = length_of_the_code_unit_sequence_the_BOM_is_mapped_to * sizeof(SimpleCharacterEncodingScheme_default::code_unit);
 		
 		private:
 			// This is basically a more-constexpr-friendly array (std::array is surprisingly constexpr-unfriendly, hence it wasn't used)
@@ -131,7 +131,7 @@ namespace Unicode_CharacterEncodingModel {
 				for ( auto i = 0u ; i < length_of_the_code_unit_sequence_the_BOM_is_mapped_to ; ++i )
 				{
 					SimpleCES::serialize_constexpry( code_unit_buffer[i] , p );
-					p += SimpleCES::bytes_per_code_unit;
+					p += sizeof(typename SimpleCES::code_unit);
 				}
 				
 				return t;
