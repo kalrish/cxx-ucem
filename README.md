@@ -21,7 +21,7 @@ Requirements:
  -  cat, from GNU coreutils, or similar
 
 ###  Documentation
-Building the documentation is optional. Doxygen is used for the task. Note that it has to run on the processed headers, i.e., after the build is finished. Simply run, from the top directory:
+The documentation is in HTML format. Building it is optional. Doxygen is used for the task. Note that it has to run on the processed headers, i.e., after the build is finished. Simply run, from the top directory:
 
     $  doxygen
 
