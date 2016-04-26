@@ -53,7 +53,7 @@ Requirements:
  -  install, from GNU coreutils, or similar
  -  tput, from ncurses
 
-     The script makes use of tput _if available_ to colorize the output.
+     The script makes use of it _if available_ to colorize the output.
 
 Commands:
 
