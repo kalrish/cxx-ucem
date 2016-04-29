@@ -81,7 +81,7 @@ namespace Unicode_CharacterEncodingModel {
 			>
 			struct length_of_the_code_unit_sequence_the_BOM_is_mapped_to_computer<
 			 VariableWidthCEF,
-			 decltype( void(VariableWidthCEF::encoded_length_constexpry( ByteOrderMark_code_point ) ) )
+			 decltype( void(VariableWidthCEF::encoded_length_constexpry( ByteOrderMark_code_point )) )
 			> final
 			{
 				static constexpr auto value =
